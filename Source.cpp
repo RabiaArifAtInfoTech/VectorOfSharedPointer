@@ -146,7 +146,7 @@ int main()
     Car car1(2021, "Toyota", "Corolla", 0, 25000.0, 4);
     std::shared_ptr<Car> carPtr = std::make_shared<Car>(car1);
     std::shared_ptr<Car> carPtr2 = carPtr;
-    std::shared_ptr<Plane> planePtr = std::make_shared<Plane>(2020, "Boeing", "747", 0, 300000000.0, 4);
+    std::shared_ptr<Plane> planePtr = std::make_shared<Plane>(2020, "Boeing", "747", 0, 300000000.0, 6);
 
  //   std::cout << "Reference count: " << carPtr.use_count() << std::endl;
 
@@ -165,7 +165,9 @@ int main()
 
 
     std::cout << std::dynamic_pointer_cast<Vehicle>(*vecVehicle.begin())->getModel() << std::endl;
-    std::cout << std::dynamic_pointer_cast<Vehicle>(*(vecVehicle.begin()+1))->getBrand() << std::endl;
+    std::cout << std::dynamic_pointer_cast<Vehicle>(*(vecVehicle.begin() + 1))->getBrand() << std::endl;
+    std::cout << std::dynamic_pointer_cast<Car>(*(vecVehicle.begin() + 1))->getNumDoors() << std::endl;
+    std::cout << std::dynamic_pointer_cast<Plane>(*(vecVehicle.end()-1))->getNumEngines() << std::endl;
     std::dynamic_pointer_cast<Plane>(*(vecVehicle.end() - 1))->display();
    
 
