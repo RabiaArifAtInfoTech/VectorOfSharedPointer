@@ -139,10 +139,16 @@ void Plane::setNumEngines(int numEngines) {
 void Plane::display()  {
     std::cout << getYear() << " " << getBrand() << " " << getModel() << " with " << getMileage() << " miles, priced at $" << getPrice() << " and has " << numEngines << " engines." << std::endl;
 }
+
+
 int main()
 {
-    std::shared_ptr<Car> carPtr = std::make_shared<Car>(2021, "Toyota", "Corolla", 0, 25000.0, 4);
-    std::shared_ptr<Plane> planePtr = std::make_shared<Plane>(2021, "Boeing", "747", 0, 300000000.0, 4);
+    Car car1(2021, "Toyota", "Corolla", 0, 25000.0, 4);
+    std::shared_ptr<Car> carPtr = std::make_shared<Car>(car1);
+    std::shared_ptr<Car> carPtr2 = carPtr;
+    std::shared_ptr<Plane> planePtr = std::make_shared<Plane>(2020, "Boeing", "747", 0, 300000000.0, 4);
+
+ //   std::cout << "Reference count: " << carPtr.use_count() << std::endl;
 
 
 	carPtr->display();
@@ -152,12 +158,20 @@ int main()
     std::vector<std::shared_ptr< Vehicle >> vecVehicle;
 
     vecVehicle.push_back(carPtr);
+    vecVehicle.push_back(carPtr2);
     vecVehicle.push_back(planePtr);
+  
+   // vecVehicle.push_back(planePtr);
 
-    auto it = vecVehicle.begin();
+
+    std::cout << std::dynamic_pointer_cast<Vehicle>(*vecVehicle.begin())->getModel() << std::endl;
+    std::cout << std::dynamic_pointer_cast<Vehicle>(*(vecVehicle.begin()+1))->getBrand() << std::endl;
+    std::dynamic_pointer_cast<Plane>(*(vecVehicle.end() - 1))->display();
+   
 
     for (auto it = vecVehicle.begin(); it != vecVehicle.end(); ++it)
-        std::cout << *it << " ";
+        std::dynamic_pointer_cast<Vehicle>(*it)->display();
+
 
 
 	std::cout << "\n\n\n";
