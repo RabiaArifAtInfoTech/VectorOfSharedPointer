@@ -11,7 +11,8 @@ class Vehicle
 
 public:
     // Constructors
-    Vehicle() { };
+    Vehicle(): year(0), brand("xyz"), model("xyz"), mileage(0), price(0)
+    { };
     //{
     //   // year = 0, mileage = 0, price = 0;
     //}
@@ -19,7 +20,7 @@ public:
         : year(yearX), brand(brandX), model(modelX), mileage(mileageX), price(priceX) {}
 
     // Other member functions
-    virtual void display()
+    virtual void display() const
     {
         std::cout << year << " " << brand << " " << model << " with " << mileage << " miles, priced at $" << price;
     }
@@ -83,7 +84,7 @@ public:
     void setNumDoors(int numDoors);
 
     // Overridden member function
-    void display()
+    void display() const
     {
         Vehicle::display();
         std::cout << " and has " << numDoors << " doors." << std::endl;
@@ -106,8 +107,8 @@ int Car::getNumDoors() const {
 }
 
 // Setter
-void Car::setNumDoors(int numDoors) {
-    numDoors = numDoors;
+void Car::setNumDoors(int numDoor) {
+    this->numDoors = numDoor;
 }
 
 class Plane : public Vehicle {
@@ -125,7 +126,11 @@ public:
     void setNumEngines(int numEngines);
 
     // Overridden member function
-    void display();
+    void display() const
+    {
+        Vehicle::display();
+        std::cout << " and has " << this->numEngines << " engines." << std::endl;
+    }
 
     void start() {
         std::cout << "Starting the plane " << this->getModel() << std::endl;
@@ -144,13 +149,8 @@ int Plane::getNumEngines() const {
 }
 
 // Setter
-void Plane::setNumEngines(int numEngines) {
-    numEngines = numEngines;
-}
-
-// Overridden member function
-void Plane::display() {
-    std::cout << getYear() << " " << getBrand() << " " << getModel() << " with " << getMileage() << " miles, priced at $" << getPrice() << " and has " << numEngines << " engines." << std::endl;
+void Plane::setNumEngines(int numEngine) {
+    this->numEngines = numEngine;
 }
 
 
@@ -164,6 +164,9 @@ int main()
 
     Plane plane2(2012, "Airbus", "Airbus A32", 450, 333134666.577, 6);
 
+    Plane plane3(1999, "Boeing ", "Boeing 737", 12000, 5000000.5, 10);
+
+    Vehicle vec1(2000, "new vehicle", "xyz", 1222.3, 4334344.5);
     std::vector<Vehicle> vecVehicle;
 
     vecVehicle.push_back(car1);
@@ -172,7 +175,7 @@ int main()
     vecVehicle.push_back(plane2);
 
 
-    auto itr = vecVehicle.begin();
+    std::vector<Vehicle>::iterator itr = vecVehicle.begin();
 
     std::cout << (*itr).getBrand() << std::endl;;
     (*itr).display();
@@ -188,6 +191,8 @@ int main()
     //// Creating a vector of pointers to the base class Vehicle and store pointers to objects of the derived classes in it:
 
     std::vector<Vehicle*> vecVehicle1;
+    vecVehicle1.push_back(&vec1);
+    vecVehicle1.push_back(&plane3);
     vecVehicle1.push_back(&car1);
     vecVehicle1.push_back(&car2);
     vecVehicle1.push_back(&plane1);
@@ -195,15 +200,43 @@ int main()
 
     // Now we can access member functions of derived class using dynamic casting
 
-    Car* carPtr = dynamic_cast<Car*>(vecVehicle1[1]);
+    Car* carPtr = dynamic_cast<Car*>(vecVehicle1[2]);
     carPtr->display();
     carPtr->start();
     
-    Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[2]);
+    Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[4]);
 
     planePtr->display();
     planePtr->start();
 
+    //
+    std::cout << "\n\n\nFor loop: \n\n";
+
+    for (auto itr2 = vecVehicle1.begin(); itr2 != vecVehicle1.end(); itr2++) {
+        if (typeid(**itr2) == typeid(Car)) {
+            Car* car_ptr = dynamic_cast<Car*>(*itr2);
+            car_ptr->start();
+            car_ptr->display();
+            std::cout << car_ptr->getNumDoors() << std::endl;
+            std::cout << std::endl;
+        }
+        else if (typeid(**itr2) == typeid(Plane)) {
+            Plane* plane_ptr = dynamic_cast<Plane*>(*itr2);
+            plane_ptr->start();
+            plane_ptr->display();
+            std::cout << plane_ptr->getNumEngines() << std::endl;
+            std::cout << std::endl;
+
+        }
+        else
+        {
+            Vehicle* vecTemp = (*itr2);
+            vecTemp->start();
+            vecTemp->display();
+            std::cout << std::endl << std::endl;
+
+        }
+    }
 
 
     std::cout << "\n\n\n";
