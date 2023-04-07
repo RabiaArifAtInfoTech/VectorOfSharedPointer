@@ -167,7 +167,11 @@ int main()
     Plane plane3(1999, "Boeing ", "Boeing 737", 12000, 5000000.5, 10);
 
     Vehicle vec1(2000, "new vehicle", "xyz", 1222.3, 4334344.5);
+
+
     std::vector<Vehicle> vecVehicle;
+
+    vecVehicle.push_back(vec1);
 
     vecVehicle.push_back(car1);
     vecVehicle.push_back(car2);
@@ -175,53 +179,22 @@ int main()
     vecVehicle.push_back(plane2);
 
 
-    std::vector<Vehicle>::iterator itr = vecVehicle.begin();
-
-    std::cout << (*itr).getBrand() << std::endl;;
-    (*itr).display();
-    std::cout << std::endl;;
-    (*itr).start();
-
-    //Car* derived_ptr = dynamic_cast<Car*>(itr);
-
-    // // Error	C2672	'std::dynamic_pointer_cast': no matching overloaded function found
    
 
-    //// SOLUTION ::
-    //// Creating a vector of pointers to the base class Vehicle and store pointers to objects of the derived classes in it:
 
-    std::vector<Vehicle*> vecVehicle1;
-    vecVehicle1.push_back(&vec1);
-    vecVehicle1.push_back(&plane3);
-    vecVehicle1.push_back(&car1);
-    vecVehicle1.push_back(&car2);
-    vecVehicle1.push_back(&plane1);
-    vecVehicle1.push_back(&plane2);
+    std::cout << "For loop: \n\n";
 
-    // Now we can access member functions of derived class using dynamic casting
-
-    Car* carPtr = dynamic_cast<Car*>(vecVehicle1[2]);
-    carPtr->display();
-    carPtr->start();
-    
-    Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[4]);
-
-    planePtr->display();
-    planePtr->start();
-
-    //
-    std::cout << "\n\n\nFor loop: \n\n";
-
-    for (auto itr2 = vecVehicle1.begin(); itr2 != vecVehicle1.end(); itr2++) {
-        if (typeid(**itr2) == typeid(Car)) {
-            Car* car_ptr = dynamic_cast<Car*>(*itr2);
+    for (auto itr2 = vecVehicle.begin(); itr2 != vecVehicle.end(); itr2++) {
+        Vehicle* vec = &(*itr2);
+        if (typeid(vec) == typeid(Car)) {
+            Car* car_ptr = dynamic_cast<Car*>(vec);
             car_ptr->start();
             car_ptr->display();
             std::cout << car_ptr->getNumDoors() << std::endl;
             std::cout << std::endl;
         }
-        else if (typeid(**itr2) == typeid(Plane)) {
-            Plane* plane_ptr = dynamic_cast<Plane*>(*itr2);
+        else if (typeid(vec) == typeid(Plane)) {
+            Plane* plane_ptr = dynamic_cast<Plane*>(vec);
             plane_ptr->start();
             plane_ptr->display();
             std::cout << plane_ptr->getNumEngines() << std::endl;
@@ -230,13 +203,107 @@ int main()
         }
         else
         {
-            Vehicle* vecTemp = (*itr2);
-            vecTemp->start();
-            vecTemp->display();
+           
+            vec->start();
+            vec->display();
+      
             std::cout << std::endl << std::endl;
 
         }
     }
+
+    /*
+     std::vector<Vehicle>::iterator itr = vecVehicle.begin();
+
+    Vehicle* vec = &(*itr);
+    Car* derived_ptr = dynamic_cast<Car*>(vec);
+
+    derived_ptr->getNumDoors();
+
+    (itr + 3)->start();
+
+    (itr + 3)->display();
+
+    
+    std::cout << " \n" << (itr + 3)->getMileage();
+    std::cout << "\n\n\n";
+
+    std::cout << (*itr).getBrand() << std::endl;;
+    (*itr).display();
+    std::cout << std::endl;;
+    (*itr).start();
+
+    std::cout << (*(itr+1)).getBrand() << std::endl;;
+    (*(itr + 1)).display();
+    std::cout << std::endl;;
+    (*(itr + 1)).start();*/
+
+
+
+
+
+
+    ////Car derived_ptr = dynamic_cast<Car*>(vecVehicle[1]);
+
+    //// // Error	C2672	'std::dynamic_pointer_cast': no matching overloaded function found
+   
+
+    ////// SOLUTION ::
+    ////// Creating a vector of pointers to the base class Vehicle and store "pointers to objects" of the derived classes in it:
+
+    //std::vector<Vehicle*> vecVehicle1;
+    //vecVehicle1.push_back(&vec1);
+    //vecVehicle1.push_back(&plane3);
+    //vecVehicle1.push_back(&car1);
+    //vecVehicle1.push_back(&car2);
+    //vecVehicle1.push_back(&plane1);
+    //vecVehicle1.push_back(&plane2);
+
+    //// Now we can access member functions of derived class using dynamic casting
+
+    //
+    //Car* carPtr = dynamic_cast<Car*>(vecVehicle1[2]);
+    //carPtr->display();
+    //carPtr->start();
+    //
+    //
+
+
+    //Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[4]);
+
+    //planePtr->display();
+    //planePtr->start();
+    //std::cout << planePtr->getNumEngines();
+
+
+    ////
+    //std::cout << "\n\n\nFor loop: \n\n";
+
+    //for (auto itr2 = vecVehicle1.begin(); itr2 != vecVehicle1.end(); itr2++) {
+    //    if (typeid(**itr2) == typeid(Car)) {
+    //        Car* car_ptr = dynamic_cast<Car*>(*itr2);
+    //        car_ptr->start();
+    //        car_ptr->display();
+    //        std::cout << car_ptr->getNumDoors() << std::endl;
+    //        std::cout << std::endl;
+    //    }
+    //    else if (typeid(**itr2) == typeid(Plane)) {
+    //        Plane* plane_ptr = dynamic_cast<Plane*>(*itr2);
+    //        plane_ptr->start();
+    //        plane_ptr->display();
+    //        std::cout << plane_ptr->getNumEngines() << std::endl;
+    //        std::cout << std::endl;
+
+    //    }
+    //    else
+    //    {
+    //        Vehicle* vecTemp = (*itr2);
+    //        vecTemp->start();
+    //        vecTemp->display();
+    //        std::cout << std::endl << std::endl;
+
+    //    }
+    //}
 
 
     std::cout << "\n\n\n";
