@@ -156,7 +156,7 @@ void Plane::setNumEngines(int numEngine) {
 
 int main()
 {
-    Car car1(2022, "Toyota", "Camry", 0, 30000.0, 2);
+    Car car1(2022, "Toyota", "Camry", 0, 30000.0, 4);
 
     Car car2(2019, "Toyota", "Prius", 1000, 20000.0, 4);
 
@@ -171,55 +171,35 @@ int main()
 
     std::vector<Vehicle> vecVehicle;
 
-    vecVehicle.push_back(vec1);
 
     vecVehicle.push_back(car1);
+
     vecVehicle.push_back(car2);
     vecVehicle.push_back(plane1);
     vecVehicle.push_back(plane2);
 
 
-   
+    std::vector<Vehicle>::iterator itr = vecVehicle.begin();
 
 
-    std::cout << "For loop: \n\n";
 
-    for (auto itr2 = vecVehicle.begin(); itr2 != vecVehicle.end(); itr2++) {
-        Vehicle* vec = &(*itr2);
-        if (typeid(vec) == typeid(Car)) {
-            Car* car_ptr = dynamic_cast<Car*>(vec);
-            car_ptr->start();
-            car_ptr->display();
-            std::cout << car_ptr->getNumDoors() << std::endl;
-            std::cout << std::endl;
-        }
-        else if (typeid(vec) == typeid(Plane)) {
-            Plane* plane_ptr = dynamic_cast<Plane*>(vec);
-            plane_ptr->start();
-            plane_ptr->display();
-            std::cout << plane_ptr->getNumEngines() << std::endl;
-            std::cout << std::endl;
+    //wrong solution
 
-        }
-        else
-        {
-           
-            vec->start();
-            vec->display();
-      
-            std::cout << std::endl << std::endl;
-
-        }
-    }
-
-    /*
-     std::vector<Vehicle>::iterator itr = vecVehicle.begin();
-
-    Vehicle* vec = &(*itr);
+    /*Vehicle* vec = &(*itr);
     Car* derived_ptr = dynamic_cast<Car*>(vec);
 
-    derived_ptr->getNumDoors();
 
+    derived_ptr->display();
+
+    derived_ptr->getNumDoors();*/
+
+
+    //The dynamic_cast operation: This operation is used to convert the Vehicle* pointer to a Car* pointer.
+    //However, this is only safe if the original object is actually a Car. If the object is not a Car, then the dynamic_cast will fail and return a null pointer
+
+
+
+    
     (itr + 3)->start();
 
     (itr + 3)->display();
@@ -236,74 +216,80 @@ int main()
     std::cout << (*(itr+1)).getBrand() << std::endl;;
     (*(itr + 1)).display();
     std::cout << std::endl;;
-    (*(itr + 1)).start();*/
+    (*(itr + 1)).start();
 
 
+    
 
+    //Car derived_ptr = dynamic_cast<Car*>(vecVehicle[1]);
 
-
-
-    ////Car derived_ptr = dynamic_cast<Car*>(vecVehicle[1]);
-
-    //// // Error	C2672	'std::dynamic_pointer_cast': no matching overloaded function found
+    // // Error	C2672	'std::dynamic_pointer_cast': no matching overloaded function found
    
 
-    ////// SOLUTION ::
-    ////// Creating a vector of pointers to the base class Vehicle and store "pointers to objects" of the derived classes in it:
+    //// SOLUTION ::
+    //// Creating a vector of pointers to the base class Vehicle and store "pointers to objects" of the derived classes in it:
 
-    //std::vector<Vehicle*> vecVehicle1;
-    //vecVehicle1.push_back(&vec1);
-    //vecVehicle1.push_back(&plane3);
-    //vecVehicle1.push_back(&car1);
-    //vecVehicle1.push_back(&car2);
-    //vecVehicle1.push_back(&plane1);
-    //vecVehicle1.push_back(&plane2);
+    std::vector<Vehicle*> vecVehicle1;
+    vecVehicle1.push_back(&vec1);
+    vecVehicle1.push_back(&plane3);
+    vecVehicle1.push_back(&car1);
+    vecVehicle1.push_back(&car2);
+    vecVehicle1.push_back(&plane1);
+    vecVehicle1.push_back(&plane2);
 
-    //// Now we can access member functions of derived class using dynamic casting
+
+    //wrong solution
+   /* auto itr2 = vecVehicle1.begin();
+    Vehicle* vec1 = (*itr2);
+    Car* derived_ptr1 = dynamic_cast<Car*>(vec1);
+
+    derived_ptr1->display();*/
+
+
+   // derived_ptr->getNumDoors();
+
+
+    // Now we can access member functions of derived class using dynamic casting
+
+    Car* carPtr = dynamic_cast<Car*>(vecVehicle1[2]);
+    carPtr->display();
+    carPtr->start();
+    
+    Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[4]);
+
+    planePtr->display();
+    planePtr->start();
+    std::cout << planePtr->getNumEngines();
+
 
     //
-    //Car* carPtr = dynamic_cast<Car*>(vecVehicle1[2]);
-    //carPtr->display();
-    //carPtr->start();
-    //
-    //
+    std::cout << "\n\n\nFor loop: \n\n";
 
+    for (auto itr2 = vecVehicle1.begin(); itr2 != vecVehicle1.end(); itr2++) {
+        if (typeid(**itr2) == typeid(Car)) {
+            Car* car_ptr = dynamic_cast<Car*>(*itr2);
+            car_ptr->start();
+            car_ptr->display();
+            std::cout << car_ptr->getNumDoors() << std::endl;
+            std::cout << std::endl;
+        }
+        else if (typeid(**itr2) == typeid(Plane)) {
+            Plane* plane_ptr = dynamic_cast<Plane*>(*itr2);
+            plane_ptr->start();
+            plane_ptr->display();
+            std::cout << plane_ptr->getNumEngines() << std::endl;
+            std::cout << std::endl;
 
-    //Plane* planePtr = dynamic_cast<Plane*>(vecVehicle1[4]);
+        }
+        else
+        {
+            Vehicle* vecTemp = (*itr2);
+            vecTemp->start();
+            vecTemp->display();
+            std::cout << std::endl << std::endl;
 
-    //planePtr->display();
-    //planePtr->start();
-    //std::cout << planePtr->getNumEngines();
-
-
-    ////
-    //std::cout << "\n\n\nFor loop: \n\n";
-
-    //for (auto itr2 = vecVehicle1.begin(); itr2 != vecVehicle1.end(); itr2++) {
-    //    if (typeid(**itr2) == typeid(Car)) {
-    //        Car* car_ptr = dynamic_cast<Car*>(*itr2);
-    //        car_ptr->start();
-    //        car_ptr->display();
-    //        std::cout << car_ptr->getNumDoors() << std::endl;
-    //        std::cout << std::endl;
-    //    }
-    //    else if (typeid(**itr2) == typeid(Plane)) {
-    //        Plane* plane_ptr = dynamic_cast<Plane*>(*itr2);
-    //        plane_ptr->start();
-    //        plane_ptr->display();
-    //        std::cout << plane_ptr->getNumEngines() << std::endl;
-    //        std::cout << std::endl;
-
-    //    }
-    //    else
-    //    {
-    //        Vehicle* vecTemp = (*itr2);
-    //        vecTemp->start();
-    //        vecTemp->display();
-    //        std::cout << std::endl << std::endl;
-
-    //    }
-    //}
+        }
+    }
 
 
     std::cout << "\n\n\n";
